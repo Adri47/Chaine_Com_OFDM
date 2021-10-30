@@ -3,12 +3,12 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity scrambler is
 port(
-   iClock            : in	std_logic;
-   iReset            : in	std_logic;
-   iEN      		 	: in	std_logic;
-   iData           	: in	std_logic;
-   oDataValid        : out std_logic;
-   oData      			: out	std_logic);
+       iClock            : in	std_logic;
+       iReset            : in	std_logic;
+       iEN      		 : in	std_logic;
+       iData           	 : in	std_logic;
+       oDataValid        : out std_logic;
+       oData      		 : out	std_logic);
 end scrambler;
 
 architecture Behavioral of scrambler is
