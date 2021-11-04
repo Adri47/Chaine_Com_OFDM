@@ -125,29 +125,29 @@ V_soft = [U_soft, padding_bits];
 V_soft_size = length(V_soft);
 
 %% Write UART
-s = send_UART(V_soft,8)
+s = send_UART(V_soft,V_soft_size)
 
-%% Scrambler
+% %% Scrambler
 % S_soft=step(Scrambler_U_obj,V_soft.');
 % S_soft_size = length(S_soft);
 % 
 % 
-%% BCH Encoder
+% %% BCH Encoder
 % X_gf_soft = bchenc(gf(reshape(S_soft, bch_k, bch_cwd_nb).',1), bch_n, bch_k); % codeur BCH(bch_n,bch_k)
 % X_soft = double( X_gf_soft.x );
-
-%% Read UART
-% S_hard=recv_UART(s, V_soft_size*4);
-% X_soft = reshape((double(dec2bin(S_hard))-48)',[7,32])';
-
-%% Interleaver
+% 
+% %% Read UART
+% % S_hard=recv_UART(s, V_soft_size*4);
+% % X_soft = reshape((double(dec2bin(S_hard))-48)',[7,32])';
+% 
+% %% Interleaver
 % P_soft=convintrlv([reshape(X_soft.',1,[])],intlvr_line_nb,intlvr_reg_size);
 % P_soft_size = length(P_soft);
 % 
 % %% Write UART
 % % s = send_UART(P_soft,P_soft_size)
-% 
-%% Convolutionnal Encoder
+% % 
+% %% Convolutionnal Encoder
 % C_soft = convenc(P_soft,trellis);
 % C_soft_length = length(C_soft);
 
@@ -215,7 +215,7 @@ z = y + noise; %signal + bruit
 
 %% OFDM Demodulator 
 
-z = reshape(z, [NFFT+D,4]);
+z = reshape(z, [NFFT+D,4]);             % Démux 1 vers N
 CP_OFDM_RX(:,1) = z([D+1:NFFT+D],1);
 CP_OFDM_RX(:,2) = z([D+1:NFFT+D],2);
 CP_OFDM_RX(:,3) = z([D+1:NFFT+D],3);
@@ -224,7 +224,7 @@ CP_OFDM_RX(:,4) = z([D+1:NFFT+D],4);
 OFMD_mod_RX = fft(CP_OFDM_RX);
 
 %% Channel equalizer
-H = fft(h,NFFT); 
+H = fft(h,NFFT);                            
 CP_OFDM_E(:,1) = OFMD_mod_RX(:,1)./H.';
 CP_OFDM_E(:,2) = OFMD_mod_RX(:,2)./H.';
 CP_OFDM_E(:,3) = OFMD_mod_RX(:,3)./H.';
